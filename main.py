@@ -9,7 +9,8 @@ from datetime import datetime
 # 모듈 임포트
 from modules.qr_generator import generate_qr
 from modules.qr_scanner import scan_qr_and_get_item
-from modules.transaction_manager import append_transaction  # 📌 추가
+from modules.transaction_manager import append_transaction
+from modules.report_exporter import export_reports
 
 # 데이터 경로
 DATA_FILE = "./database/items.csv"
@@ -86,12 +87,15 @@ class ScanForm(BoxLayout):
             memo=memo
         )
 
-        # 입력 초기화
         self.ids.intake_input.text = ""
         self.ids.usage_input.text = ""
         self.ids.request_input.text = ""
         self.ids.memo_input.text = ""
         self.ids.status_label.text = "💾 거래 내역 저장 완료!"
+
+    def generate_reports(self):
+        export_reports()
+        self.ids.status_label.text = "📊 보고서가 생성되었습니다! reports 폴더를 확인하세요."
 
 # ────────────────────────────────────────
 # ③ 스크린 관리자
