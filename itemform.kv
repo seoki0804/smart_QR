@@ -1,4 +1,4 @@
-<ItemForm>:
+<RegisterForm>:
     orientation: 'vertical'
     padding: 20
     spacing: 10
@@ -19,3 +19,13 @@
     Button:
         text: "저장하기"
         on_press: root.save_item()
+
+    Label:
+        id: status_label
+        text: ""
+        size_hint_y: None
+        height: 40
+
+<RegisterScreen>:
+    name: 'register'
+    RegisterForm:
