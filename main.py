@@ -4,6 +4,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 import csv
 import uuid
 import os
+import webbrowser  # ← Gmail 열기용
 from datetime import datetime
 
 # 모듈 임포트
@@ -96,6 +97,11 @@ class ScanForm(BoxLayout):
     def generate_reports(self):
         export_reports()
         self.ids.status_label.text = "📊 보고서가 생성되었습니다! reports 폴더를 확인하세요."
+
+    def share_report(self):
+        # 브라우저에서 Gmail 열기
+        webbrowser.open("https://mail.google.com/")
+        self.ids.status_label.text = "📤 Gmail이 열렸습니다. 첨부파일로 보고서를 공유하세요!"     
 
 # ────────────────────────────────────────
 # ③ 스크린 관리자
