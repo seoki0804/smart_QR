@@ -1,0 +1,21 @@
+<ItemForm>:
+    orientation: 'vertical'
+    padding: 20
+    spacing: 10
+
+    TextInput:
+        id: name_input
+        hint_text: "물품 이름"
+
+    TextInput:
+        id: desc_input
+        hint_text: "설명"
+
+    TextInput:
+        id: qty_input
+        hint_text: "초기 수량"
+        input_filter: 'int'
+
+    Button:
+        text: "저장하기"
+        on_press: root.save_item()

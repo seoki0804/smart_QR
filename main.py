@@ -1,0 +1,1 @@
+from modules.qr_generator import generate_qr
