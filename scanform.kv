@@ -19,11 +19,39 @@
         id: result_label
         text: ""
         size_hint_y: None
-        height: 200
+        height: 100
         text_size: self.width, None
         halign: "left"
         valign: "top"
 
-<ScanScreen>:
-    name: 'scan'
-    ScanForm:
+    BoxLayout:
+        size_hint_y: None
+        height: 40
+        spacing: 10
+
+        TextInput:
+            id: intake_input
+            hint_text: "수급량"
+            input_filter: 'int'
+
+        TextInput:
+            id: usage_input
+            hint_text: "소모량"
+            input_filter: 'int'
+
+        TextInput:
+            id: request_input
+            hint_text: "청구량"
+            input_filter: 'int'
+
+    TextInput:
+        id: memo_input
+        hint_text: "메모 입력 (선택)"
+        size_hint_y: None
+        height: 40
+
+    Button:
+        text: "입력값 저장하기"
+        size_hint_y: None
+        height: 50
+        on_press: root.save_transaction()

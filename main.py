@@ -9,6 +9,7 @@ from datetime import datetime
 # 모듈 임포트
 from modules.qr_generator import generate_qr
 from modules.qr_scanner import scan_qr_and_get_item
+from modules.transaction_manager import append_transaction  # 📌 추가
 
 # 데이터 경로
 DATA_FILE = "./database/items.csv"
@@ -44,19 +45,53 @@ class RegisterForm(BoxLayout):
         self.ids.status_label.text = f"[저장 완료] {name} 등록 및 QR 생성됨."
 
 # ────────────────────────────────────────
-# ② QR 스캔 화면
+# ② QR 스캔 및 거래 기록 화면
 class ScanForm(BoxLayout):
+    scanned_item = None  # 스캔된 물품 정보 저장
+
     def start_scan(self):
         self.ids.status_label.text = "QR 스캔 중... 카메라를 보세요."
         item = scan_qr_and_get_item()
 
         if item:
+            self.scanned_item = item
             result = f"📦 이름: {item['name']}\n📝 설명: {item['description']}\n📦 수량: {item['quantity']}"
             self.ids.result_label.text = result
             self.ids.status_label.text = "✅ 스캔 성공!"
         else:
+            self.scanned_item = None
             self.ids.result_label.text = ""
             self.ids.status_label.text = "❌ 스캔 실패 또는 물품 없음."
+
+    def save_transaction(self):
+        if not self.scanned_item:
+            self.ids.status_label.text = "[오류] 먼저 QR을 스캔해주세요."
+            return
+
+        try:
+            intake = int(self.ids.intake_input.text) if self.ids.intake_input.text else 0
+            usage = int(self.ids.usage_input.text) if self.ids.usage_input.text else 0
+            request = int(self.ids.request_input.text) if self.ids.request_input.text else 0
+            memo = self.ids.memo_input.text.strip()
+        except ValueError:
+            self.ids.status_label.text = "[오류] 수량 입력이 잘못되었습니다."
+            return
+
+        append_transaction(
+            item_id=self.scanned_item["id"],
+            item_name=self.scanned_item["name"],
+            intake=intake,
+            usage=usage,
+            request=request,
+            memo=memo
+        )
+
+        # 입력 초기화
+        self.ids.intake_input.text = ""
+        self.ids.usage_input.text = ""
+        self.ids.request_input.text = ""
+        self.ids.memo_input.text = ""
+        self.ids.status_label.text = "💾 거래 내역 저장 완료!"
 
 # ────────────────────────────────────────
 # ③ 스크린 관리자
