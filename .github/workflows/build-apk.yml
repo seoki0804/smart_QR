@@ -37,6 +37,13 @@ jobs:
       - name: Set JAVA_HOME
         run: echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> $GITHUB_ENV
 
+      - name: Install Android SDK Build Tools
+        run: |
+          mkdir -p $HOME/.android
+          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $HOME/.android/repositories.cfg
+          yes | sdkmanager --licenses
+          yes | sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
+
       - name: Build APK
         run: |
           buildozer init || true
